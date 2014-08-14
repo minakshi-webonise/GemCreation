@@ -1,6 +1,6 @@
 class ShopInventory
   def main_method
-    puts "Enter user type"
+    puts "Enter which user you are"
     puts "1. Shop keeper"
     puts "2 . User"
     user_type = gets.chomp

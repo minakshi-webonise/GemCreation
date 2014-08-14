@@ -3,6 +3,8 @@
   User class performs various operations
   viewing list of product, search by product id, buy produt
 =end
+
+require 'shop_inventory/modules.rb'
 class User
   include ListProduct
    @@filename = "inventory.txt"
@@ -29,7 +31,7 @@ class User
 
 # search_product method will search product with argument passes either id or name
   def search_product(arg)
-    puts "id \t name \t stock \t company name "
+    puts "id \t product name \t stock \t company name "
     File.open(@@filename ,"r") do |file|
       file.each_line do |line|
         temp_array = line.split("*")
@@ -43,20 +45,23 @@ class User
   end
 
   # method for buy product
-  def buy_product
-    puts "in buy priduct"
+    def buy_product
     puts "enter id of product you want to buy"
-    p_id = gets.chomp
-    puts p_id
+    product_id = gets.chomp
     write_file = File.open("orders.txt", "a")
     File.open(@@filename,"r") do |file|
       File.open("file.txt", "a") do |fp|
         file.each_line do |line|
           temp_array =line.split("*")
-          if temp_array[0]==p_id && Integer(temp_array[2])>0
+          if temp_array[0]==product_id && Integer(temp_array[2])>0
             puts "product is present and stock :#{temp_array[2]}"
             puts "enter your name"
             customer_name = gets.chomp
+            if /\w*/.match name
+              puts "correct"
+            else
+              puts "enter correst name"
+            end
             puts "enter credit card number"
             credit_number = gets.chomp
             puts "enter ccv number"
@@ -66,7 +71,7 @@ class User
 
             puts "stock : #{stock}"
            end
-            unless line.start_with? "#{p_id}"
+            unless line.start_with? "#{product_id}"
               fp.write("#{temp_array[0]}*#{temp_array[1]}*#{temp_array[2]}*#{temp_array[3]}")
             else
               fp.write("#{temp_array[0]}*#{temp_array[1]}*#{stock}*#{temp_array[3]}")
@@ -78,4 +83,3 @@ class User
     end
   end
 end
-require 'shop_inventory/modules.rb'

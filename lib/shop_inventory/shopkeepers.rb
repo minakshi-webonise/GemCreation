@@ -4,6 +4,7 @@
   viewing list of product, search by product name, edit produt
 =end
 require 'fileutils'
+require 'shop_inventory/modules.rb'
 class ShopKeeper
   @@filename = "inventory.txt"
   def choose_option
@@ -38,18 +39,26 @@ class ShopKeeper
   # add_product method will add product details such as name, id, stock item, company name to inventory file
   def add_product
     puts "please enter product details"
-    print "id : "
-    id = gets.chomp
-    print "name :"
+    print "enter product name :"
     name = gets.chomp
-    print "stock :"
+    print "enter stock of product:"
     stock = gets.chomp
-    print "company name :"
+    print "enter company name of product:"
     company_name = gets.chomp
-      File.open(@@filename, 'a') do |file|
-        file.write("#{id}*#{name}*#{stock}*#{company_name}\n")
+    if File.readlines(@@filename).grep(/.+/).any? == true
+      puts "contains some data"
+      File.open(@@filename, "r+") do |f|
+        count = f.read.count("\n")
+        puts count
+        f.write("#{count+1}*#{name}*#{stock}*#{company_name}\n")
       end
-
+    else
+      puts "empty file"
+      count =1;
+      File.open(@@filename, "a") do |f|
+        f.write("#{count}*#{name}*#{stock}*#{company_name}\n")
+      end
+    end
   end
 
   # remove_product method will remove details of product depending on id
@@ -78,6 +87,7 @@ class ShopKeeper
       end
     end
   end
+
   # edit_product method will  edit product details which were entered by shopkeeper
   def edit_product
     puts "enter product id"
@@ -101,9 +111,5 @@ class ShopKeeper
       end
     end
     File.rename("file.txt",@@filename)
-
-
-
   end
 end
-require 'shop_inventory/modules.rb'
